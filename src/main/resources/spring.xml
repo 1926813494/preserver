@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 开启spring扫描 -->
+	<context:component-scan base-package="com.yaoxun.preserver"></context:component-scan>
+	
+	<bean id="nioTcpChannelInitializer" class="com.yaoxun.preserver.handler.initializer.NioTcpChannelInitializer"></bean>
+	
+	<!-- 配置启动类 -->
+	<bean id="launcher" class="com.yaoxun.preserver.Launcher">
+		<property name="serverBootstrap">
+			<bean class="io.netty.bootstrap.ServerBootstrap"></bean>
+		</property>
+		<property name="parentGroup">
+			<bean class="io.netty.channel.nio.NioEventLoopGroup">
+				<constructor-arg name="nThreads" value="1"></constructor-arg>
+			</bean>
+		</property>
+		<property name="childGroup">
+			<bean class="io.netty.channel.nio.NioEventLoopGroup"></bean>
+		</property>
+		<property name="childOptions">
+			<map>
+				<entry key="TCP_NODELAY" value-type="java.lang.Boolean" value="true"></entry>
+			</map>
+		</property>
+		<property name="options">
+			<map>
+				<entry key="SO_BACKLOG" value-type="java.lang.Integer" value="128"></entry>
+			</map>
+		</property>
+		<property name="childHandlers">
+			<list>
+				<ref bean="nioTcpChannelInitializer"/>
+			</list>
+		</property>
+		<property name="handlers">
+			<list>				
+				<bean class="io.netty.handler.logging.LoggingHandler">
+					<constructor-arg name="level">
+						<bean class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+							<property name="staticField" value="io.netty.handler.logging.LogLevel.INFO"></property>
+						</bean>
+					</constructor-arg>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+</beans>
