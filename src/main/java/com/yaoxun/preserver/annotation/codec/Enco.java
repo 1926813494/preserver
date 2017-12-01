@@ -7,6 +7,28 @@ import java.lang.annotation.Target;
 
 /**
  * 编码实体
+ * <br />
+ * <pre>
+ * startCode = aa
+ * funCode = 00 11
+ * frameLen = 04 00
+ * number = bb cc gg dd
+ * 那么报文组成：aa 00 11 04 00 bb cc gg dd
+ * 实体定义如下
+ * class Entity {
+ * 		@Enco
+ * 		private byte startCode;
+ * 
+ * 		@Enco
+ * 		private short funCode;
+ * 		
+ * 		@Enco
+ * 		private short frameLen;
+ * 
+ * 		@Enco
+ * 		private String number;
+ * }
+ * </pre>
  * @author Loren
  * @createTime 2017年12月1日 下午5:22:51
  */

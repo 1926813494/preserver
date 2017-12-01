@@ -6,7 +6,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 解码注解
+ * 解码注解，使用该注解的类定义的字段属性需要按和报文的顺序一致
+ * <br />
+ * <pre>
+ * startCode = aa
+ * funCode = 00 11
+ * frameLen = 04 00
+ * number = bb cc gg dd
+ * 那么报文组成：aa 00 11 04 00 bb cc gg dd
+ * 实体定义如下
+ * class Entity {
+ * 		@Deco
+ * 		private byte startCode;
+ * 
+ * 		@Deco
+ * 		private short funCode;
+ * 		
+ * 		@Deco
+ * 		private short frameLen;
+ * 
+ * 		@Deco(length=4,hilo=true)
+ * 		private String number;
+ * }
+ * </pre>
  * @author Loren
  * @createTime 2017年12月1日 下午5:22:33
  */
