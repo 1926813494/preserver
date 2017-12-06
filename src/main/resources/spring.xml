@@ -51,6 +51,9 @@
 				</bean>
 			</list>
 		</property>
+		<property name="port">
+			<value>${application.port}</value>
+		</property>
 	</bean>
 	
 </beans>
